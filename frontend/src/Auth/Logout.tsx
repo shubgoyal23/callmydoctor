@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 const Logout = () => {
    const dispatch = useDispatch();
    const handleLogout = () => {
-      api.post("/logout")
+      api.get("/logout")
          .then((res) => {
             if (res.success) {
                dispatch(logout());

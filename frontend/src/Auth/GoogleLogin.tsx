@@ -20,7 +20,7 @@ function GoogleLoginApp() {
 
 function GoogleLoginAppComponent() {
   const dispatch = useDispatch();
-  const LoginWithGoogle = (data) => {
+  const LoginWithGoogle = (data: { token: string }) => {
     const token = data?.token;
     api
       .post("/login-google", {

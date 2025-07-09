@@ -1,7 +1,6 @@
 import toast from "react-hot-toast";
 import {
    Form,
-   FormDescription,
    FormField,
    FormItem,
    FormLabel,
@@ -33,7 +32,11 @@ const loginSchema = z.object({
 });
 
 // Login Component
-const LoginPage = ({ setCurrentPage }) => {
+const LoginPage = ({
+   setCurrentPage,
+}: {
+   setCurrentPage: (page: string) => void;
+}) => {
    const dispatch = useDispatch();
    const form = useForm({
       resolver: zodResolver(loginSchema),
@@ -43,11 +46,11 @@ const LoginPage = ({ setCurrentPage }) => {
       },
    });
 
-   const onSubmit = async (data) => {
+   const onSubmit = async (data: z.infer<typeof loginSchema>) => {
       handleLogin(data.email, data.password);
    };
 
-   const handleLogin = async (email, password) => {
+   const handleLogin = async (email: string, password: string) => {
       api.post("/login", { email, password })
          .then((res) => {
             if (res.success) {
@@ -123,7 +126,7 @@ const LoginPage = ({ setCurrentPage }) => {
                >
                   Login
                </Button>
-               <GoogleLoginApp/>
+               <GoogleLoginApp />
             </CardFooter>
          </Card>
       </div>

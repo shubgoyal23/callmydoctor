@@ -1,7 +1,6 @@
 import toast from "react-hot-toast";
 import {
    Form,
-   FormDescription,
    FormField,
    FormItem,
    FormLabel,
@@ -24,6 +23,9 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "@/lib/api";
 import GoogleLoginApp from "./GoogleLogin";
+import { useState } from "react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 
 const loginSchema = z.object({
    name: z.string().min(3),
@@ -32,7 +34,12 @@ const loginSchema = z.object({
 });
 
 // Login Component
-const RegisterPage = ({ setCurrentPage }) => {
+const RegisterPage = ({
+   setCurrentPage,
+}: {
+   setCurrentPage: (page: string) => void;
+}) => {
+   const [isDoctor, setIsDoctor] = useState<boolean>(false);
    const form = useForm({
       resolver: zodResolver(loginSchema),
       defaultValues: {
@@ -42,12 +49,16 @@ const RegisterPage = ({ setCurrentPage }) => {
       },
    });
 
-   const onSubmit = async (data) => {
+   const onSubmit = async (data: z.infer<typeof loginSchema>) => {
       handleRegister(data.email, data.password, data.name);
    };
 
-   const handleRegister = async (email, password, name) => {
-      api.post("/register", { email, password, name })
+   const handleRegister = async (
+      email: string,
+      password: string,
+      name: string
+   ) => {
+      api.post("/register", { email, password, name, isDoctor })
          .then((res) => {
             if (res.success) {
                toast.success("Registered successfully");
@@ -126,6 +137,26 @@ const RegisterPage = ({ setCurrentPage }) => {
                      />
                   </form>
                </Form>
+
+               <div className="w-full mt-4">
+                  <Label className="flex items-start gap-3 rounded-lg border p-3">
+                     <Checkbox
+                        id="toggle-2"
+                        defaultChecked={isDoctor}
+                        onCheckedChange={(checked) => setIsDoctor(!!checked)}
+                        className="data-[state=checked]:border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground dark:data-[state=checked]:border-primary dark:data-[state=checked]:bg-primary"
+                     />
+                     <div className="grid gap-1.5 font-normal">
+                        <p className="text-sm leading-none font-medium">
+                           Are you a doctor?
+                        </p>
+                        <p className="text-accent text-sm">
+                           If you are a doctor, you can register as a doctor to
+                           manage your appointments.
+                        </p>
+                     </div>
+                  </Label>
+               </div>
             </CardContent>
             <CardFooter className="flex-col gap-2">
                <Button

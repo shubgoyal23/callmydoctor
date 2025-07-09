@@ -1,13 +1,10 @@
-import { Button } from "./components/ui/button"
-import { useState } from "react"
-
-
+import { useSelector } from "react-redux";
+import Auth from "./Auth/Auth";
+import Home from "./Dashboard/Home";
 function App() {
-  const [count, setCount] = useState(0)
+   const { loggedIn } = useSelector((state: any) => state.user);
 
-  return (
-    <Button onClick={() => setCount(count + 1)}>Count: {count}</Button>
-  )
+   return !loggedIn ? <Auth /> : <Home />;
 }
 
-export default App
+export default App;
