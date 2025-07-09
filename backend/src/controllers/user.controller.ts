@@ -23,7 +23,7 @@ const generateAccessTokenAndRefresToken = async (id: string) => {
   }
 };
 const registeruser = asyncHandler(async (req, res) => {
-  const { firstName, lastName, email, password } = req.body;
+  const { firstName, lastName, email, password, isDoctor } = req.body;
 
   if (!firstName || !email || !password) {
     throw new ApiError(
@@ -41,6 +41,7 @@ const registeruser = asyncHandler(async (req, res) => {
     password,
     firstName,
     lastName,
+    role: isDoctor ? "doctor" : "user",
     isActive: true,
   });
 
