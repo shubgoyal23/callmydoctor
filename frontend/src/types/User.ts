@@ -1,6 +1,7 @@
-import type { Doctor } from "./Doctors";
+import type { DoctorDetails } from "./Doctors";
 
 export interface User {
+   _id: string;
    firstName: string;
    lastName: string;
    email: string;
@@ -17,5 +18,5 @@ export interface User {
    };
    createdAt: string;
    updatedAt: string;
-   details?: Doctor;
+   details?: DoctorDetails;
 }

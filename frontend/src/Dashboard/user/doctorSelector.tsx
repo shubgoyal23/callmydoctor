@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { Doctor } from "../../types/Doctors";
+import type { DoctorDetails } from "../../types/Doctors";
 import {
    Select,
    SelectContent,
@@ -8,15 +8,16 @@ import {
    SelectValue,
 } from "@/components/ui/select";
 import { api } from "@/lib/api";
+import type { User } from "@/types/User";
 
 function DoctorSelect() {
-   const [selectedOption, setSelectedOption] = useState<Doctor | null>(null);
-   const [doctorsList, setDoctorsList] = useState<Doctor[]>([] as Doctor[]);
+   const [selectedOption, setSelectedOption] = useState<User | null>(null);
+   const [doctorsList, setDoctorsList] = useState<User[]>([] as User[]);
 
    useEffect(() => {
       const fetchDoctors = async () => {
          try {
-            const response = await api.get<Doctor[]>(
+            const response = await api.get<User[]>(
                "/api/v1/appointments/doctors"
             );
             setDoctorsList(response.data);

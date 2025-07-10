@@ -23,11 +23,11 @@ const getDoctorList = asyncHandler(async (req, res) => {
         from: "doctors",
         localField: "_id",
         foreignField: "doctorId",
-        as: "doctorDetails",
+        as: "details",
       },
     },
     {
-      $unwind: "$doctorDetails",
+      $unwind: "$details",
     },
     {
       $project: {
@@ -43,7 +43,7 @@ const getDoctorList = asyncHandler(async (req, res) => {
         fee: 1,
         availability: 1,
         slotTime: 1,
-        doctorDetails: 1,
+        details: 1,
       },
     },
   ]);

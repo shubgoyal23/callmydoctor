@@ -15,11 +15,32 @@ const getAppointmentList = asyncHandler(async (req, res) => {
     d.getDate(),
   ).getTime();
 
-  const appointmentList = await Appointment.find({
-    doctorId: req.user?._id,
-    date: date_formated,
-    status: "confirmed",
-  });
+  const appointmentList = await Appointment.aggregate([
+    {
+      $match: {
+        doctorId: req.user?._id,
+        date: date_formated,
+        status: "confirmed",
+      },
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "userId",
+        foreignField: "_id",
+        as: "userDetails",
+      },
+    },
+    {
+      $project: {
+        _id: 1,
+        startTime: 1,
+        endTime: 1,
+        date: 1,
+        userDetails: 1,
+      },
+    },
+  ]);
 
   return res
     .status(200)

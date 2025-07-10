@@ -5,11 +5,12 @@ import {
    SidebarProvider,
    SidebarTrigger,
 } from "@/components/ui/sidebar";
-import SlotSelector from "./user/dateSelector";
-import DoctorSelect from "./user/doctorSelector";
-import ProfessionalDetailsForm from "./Doctor/Details";
+import { useSelector } from "react-redux";
+import DoctorDashboard from "./Doctor/DoctorDashboard";
+import UserDashboard from "./user/UserDashboard";
 
 export default function Page() {
+   const { isDoctor } = useSelector((state: any) => state.user);
    return (
       <SidebarProvider>
          <AppSidebar />
@@ -21,19 +22,11 @@ export default function Page() {
                      orientation="vertical"
                      className="mr-2 data-[orientation=vertical]:h-4"
                   />
-                  <div>Dashboard</div>
+                  <div>{isDoctor ? "Doctor Dashboard" : "User Dashboard"}</div>
                </div>
             </header>
-            <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-               <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-                  <div className="bg-muted/50 aspect-video rounded-xl" />
-                  <div className="bg-muted/50 aspect-video rounded-xl" />
-                  <div className="bg-muted/50 aspect-video rounded-xl" />
-                  <SlotSelector />
-                  <DoctorSelect />
-                  <ProfessionalDetailsForm />
-               </div>
-               <div className="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min" />
+            <div className="w-full h-full p-4">
+               {isDoctor ? <DoctorDashboard /> : <UserDashboard />}
             </div>
          </SidebarInset>
       </SidebarProvider>

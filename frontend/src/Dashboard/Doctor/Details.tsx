@@ -9,8 +9,11 @@ import type { DoctorDetails } from '@/types/Doctors';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { api } from '@/lib/api';
 import toast from 'react-hot-toast';
+import { updateDoctorDetails } from '@/store/userSlice/userSlice';
+import { useDispatch } from 'react-redux';
 
 const ProfessionalDetailsForm = () => {
+   const dispatch = useDispatch();
    const [formData, setFormData] = useState<DoctorDetails>({
       specialization: "",
       services: [],
@@ -78,6 +81,20 @@ const ProfessionalDetailsForm = () => {
       ));
    };
 
+   const addAvailabilityForAllDays = () => {
+      if (currentTimeRanges.some(range => range.start && range.end)) {
+         const validTimeRanges = currentTimeRanges
+            .filter(range => range.start && range.end)
+            .map(range => `${range.start}-${range.end}`);
+
+         const m = daysOfWeek.map(day => ({ day, time: validTimeRanges }));
+         setFormData(prev => ({
+            ...prev,
+            availability: [...prev.availability, ...m]
+         }));
+      }
+      setCurrentTimeRanges([{ start: '', end: '' }]);
+   }
    const addAvailability = () => {
       if (currentDay && currentTimeRanges.some(range => range.start && range.end)) {
          const validTimeRanges = currentTimeRanges
@@ -136,6 +153,7 @@ const ProfessionalDetailsForm = () => {
          .then((res: any) => {
             if (res.success) {
                toast.success("Doctor details updated successfully");
+               dispatch(updateDoctorDetails(res.data));
                resetForm()
             }
          })
@@ -146,7 +164,7 @@ const ProfessionalDetailsForm = () => {
    };
 
    return (
-      <div className="relative max-w-4xl mx-auto p-6 space-y-6">
+      <div className="relative space-y-6">
          <Card>
             <CardHeader>
                <CardTitle className="text-2xl font-bold">Professional Details Form</CardTitle>
@@ -335,6 +353,9 @@ const ProfessionalDetailsForm = () => {
 
                            <Button type="button" onClick={addAvailability} className="w-full">
                               Add Availability
+                           </Button>
+                           <Button type="button" onClick={addAvailabilityForAllDays} className="w-full">
+                              Add For All Days
                            </Button>
                         </div>
                      </Card>

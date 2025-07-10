@@ -7,6 +7,6 @@ const router = Router();
 // public routes
 
 // secure route
-router.route("/").post(verifyJwt, getAppointmentList);
+router.route("/appointments").post(verifyJwt, getAppointmentList);
 
 export default router;
