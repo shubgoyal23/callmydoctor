@@ -8,9 +8,9 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 
 const getDoctorList = asyncHandler(async (req, res) => {
   let { category } = req.query;
-  if (!category) {
-    throw new ApiError(401, "category is required");
-  }
+  // if (!category) {
+  //   throw new ApiError(401, "category is required");
+  // }
 
   const doctorDetails = await User.aggregate([
     {

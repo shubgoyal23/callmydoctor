@@ -3,12 +3,13 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import connectDb from "./db/connectDb.js";
 import { ApiResponse } from "./utils/ApiResposne.js";
+import config from "./config/config.js";
 
 const app = express();
 
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN?.split(";") || "*",
+    origin: config.corsOrigin,
     credentials: true,
   }),
 );

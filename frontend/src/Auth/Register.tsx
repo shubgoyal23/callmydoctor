@@ -60,7 +60,7 @@ const RegisterPage = ({
    ) => {
       const firstName = name.split(" ")[0];
       const lastName = name.split(" ")[1];
-      api.post("/register", { email, password, firstName, lastName, isDoctor })
+      api.post("/api/v1/users/register", { email, password, firstName, lastName, isDoctor })
          .then((res) => {
             if (res.success) {
                toast.success("Registered successfully");

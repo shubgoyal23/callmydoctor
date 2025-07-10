@@ -6,6 +6,7 @@ import {
    SidebarTrigger,
 } from "@/components/ui/sidebar";
 import SlotSelector from "./user/dateSelector";
+import DoctorSelect from "./user/doctorSelector";
 
 export default function Page() {
    return (
@@ -28,6 +29,7 @@ export default function Page() {
                   <div className="bg-muted/50 aspect-video rounded-xl" />
                   <div className="bg-muted/50 aspect-video rounded-xl" />
                   <SlotSelector />
+                  <DoctorSelect />
                </div>
                <div className="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min" />
             </div>

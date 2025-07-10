@@ -51,7 +51,7 @@ const LoginPage = ({
    };
 
    const handleLogin = async (email: string, password: string) => {
-      api.post("/login", { email, password })
+      api.post("/api/v1/users/login", { email, password })
          .then((res) => {
             if (res.success) {
                dispatch(login(res.data));

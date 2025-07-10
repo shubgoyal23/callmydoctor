@@ -12,7 +12,7 @@ import {
 const router = Router();
 
 // secure route
-router.route("/doctors").post(verifyJwt, getDoctorList);
+router.route("/doctors").get(verifyJwt, getDoctorList);
 router.route("/slots").post(verifyJwt, getDoctorsSlots);
 router.route("/book").post(verifyJwt, bookAppointment);
 router.route("/appointments").get(verifyJwt, getAppointmentList);
