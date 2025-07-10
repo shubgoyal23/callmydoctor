@@ -26,7 +26,7 @@ const handleResponse = async (response: Response) => {
          const error = new ApiError(
             response.status,
             data?.code || "UNKNOWN_ERROR",
-            data?.detail || "An error occurred",
+            data?.detail || "An error occurred"
          );
          throw error;
       }
@@ -50,14 +50,14 @@ const request = async <T>(
    method: string,
    body?: T,
    params?: Record<string, string>,
-   headers?: Record<string, string>,
+   headers?: Record<string, string>
 ) => {
    try {
       const url = new URL(`${conf.API_BASE_URL}${endpoint}`);
 
       if (params) {
          Object.entries(params).forEach(([key, value]) =>
-            url.searchParams.append(key, value),
+            url.searchParams.append(key, value)
          );
       }
 
@@ -80,14 +80,14 @@ const request = async <T>(
 
 // Public API
 export const api = {
-   get: (endpoint: string, params?: Record<string, string>) =>
-      request(endpoint, "GET", null, params),
+   get: <T>(endpoint: string, params?: Record<string, string>) =>
+      request<T>(endpoint, "GET", undefined, params),
    post: <T>(endpoint: string, body: T, params?: Record<string, string>) =>
-      request(endpoint, "POST", body, params),
+      request<T>(endpoint, "POST", body, params),
    put: <T>(endpoint: string, body: T, params?: Record<string, string>) =>
-      request(endpoint, "PUT", body, params),
+      request<T>(endpoint, "PUT", body, params),
    patch: <T>(endpoint: string, body: T, params?: Record<string, string>) =>
-      request(endpoint, "PATCH", body, params),
-   delete: (endpoint: string, params?: Record<string, string>) =>
-      request(endpoint, "DELETE", null, params),
+      request<T>(endpoint, "PATCH", body, params),
+   delete: <T>(endpoint: string, params?: Record<string, string>) =>
+      request<T>(endpoint, "DELETE", undefined, params),
 };
