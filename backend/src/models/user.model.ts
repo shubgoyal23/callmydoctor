@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema, Model } from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-
+import { DoctorDocument } from "./doctors.model";
 // Interface for User properties
 interface IUser {
   firstName: string;
@@ -13,15 +13,12 @@ interface IUser {
   accessToken?: string;
   refreshToken?: string;
   gender: string;
-  role: {
-    type: string;
-    enum: ["user", "doctor", "admin"];
-    default: "user";
-  };
+  role: "user" | "doctor" | "admin";
   location: {
     city: string;
     locality: string;
   };
+  details?: DoctorDocument;
 }
 
 // Interface for methods on the User document
@@ -60,11 +57,7 @@ const userSchema = new Schema<UserDocument>(
     refreshToken: { type: String },
     isActive: { type: Boolean, default: true },
     picture: { type: String },
-    role: {
-      type: String,
-      enum: ["user", "doctor", "admin"],
-      default: "user",
-    },
+    role: { type: String, enum: ["user", "doctor", "admin"], default: "user" },
   },
   { timestamps: true },
 );

@@ -1,6 +1,4 @@
-export interface Doctor {
-   _id: string;
-   doctorId: string;
+export interface DoctorDetails {
    specialization: string;
    rating: number;
    services: string[];
@@ -9,9 +7,4 @@ export interface Doctor {
    fee: number;
    availability: { day: string; time: string[] }[];
    slotTime: number;
-   createdAt: string;
-   updatedAt: string;
-   firstName: string;
-   lastName: string;
-   email: string;
 }

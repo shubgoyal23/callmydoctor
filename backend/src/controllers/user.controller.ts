@@ -1,3 +1,4 @@
+import { Doctor, DoctorDocument } from "../models/doctors.model.js";
 import { User, type UserDocument } from "../models/user.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResposne.js";
@@ -77,6 +78,14 @@ const loginUser = asyncHandler(async (req, res) => {
     throw new ApiError(403, "Wrong Email or Password");
   }
 
+  if (finduser.role === "doctor") {
+    const doctor = await Doctor.findOne({ doctorId: finduser._id });
+    if (!doctor) {
+      finduser.details = {} as DoctorDocument;
+    }
+    finduser.details = doctor;
+  }
+
   const { refreshToken, accessToken } = await generateAccessTokenAndRefresToken(
     finduser?._id?.toString()!,
   );
@@ -88,7 +97,6 @@ const loginUser = asyncHandler(async (req, res) => {
   };
 
   finduser.password = undefined;
-
   finduser.refreshToken = refreshToken;
   finduser.accessToken = accessToken;
 
@@ -133,9 +141,20 @@ const logoutUser = asyncHandler(async (req, res) => {
 });
 
 const currentUser = asyncHandler(async (req, res) => {
+  let doc = {} as DoctorDocument;
+  if (req.user?.role === "doctor") {
+    const doctor = await Doctor.findOne({ doctorId: req.user._id });
+    if (doctor) {
+      doc = doctor;
+    }
+  }
+  const ret = {
+    ...req.user.toObject(),
+    details: doc,
+  };
   return res
     .status(200)
-    .json(new ApiResponse(200, req.user, "User fetched successfully"));
+    .json(new ApiResponse(200, ret, "User fetched successfully"));
 });
 
 const refreshToken = asyncHandler(async (req, res) => {
@@ -195,8 +214,8 @@ const doctorProfileUpdate = asyncHandler(async (req, res) => {
     slotTime,
   } = req.body;
 
-  const user = await User.findByIdAndUpdate(
-    req.user?._id,
+  const user = await Doctor.findOneAndUpdate(
+    { doctorId: req.user?._id },
     {
       specialization,
       services,
@@ -206,7 +225,7 @@ const doctorProfileUpdate = asyncHandler(async (req, res) => {
       availability,
       slotTime,
     },
-    { new: true },
+    { new: true, upsert: true },
   );
 
   res

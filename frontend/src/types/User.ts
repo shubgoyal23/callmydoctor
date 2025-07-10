@@ -1,3 +1,5 @@
+import type { Doctor } from "./Doctors";
+
 export interface User {
    firstName: string;
    lastName: string;
@@ -8,15 +10,12 @@ export interface User {
    accessToken?: string;
    refreshToken?: string;
    gender: string;
-   role: {
-      type: string;
-      enum: ["user", "doctor", "admin"];
-      default: "user";
-   };
+   role: "user" | "doctor" | "admin";
    location: {
       city: string;
       locality: string;
    };
    createdAt: string;
    updatedAt: string;
+   details?: Doctor;
 }
