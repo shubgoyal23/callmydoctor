@@ -1,6 +1,10 @@
 import Mongoose from "mongoose";
 let isDbConnected = false;
 
+const globalForMongoDb = globalThis as unknown as {
+  mongoDbClient?: typeof Mongoose;
+};
+
 export default async function () {
   if (isDbConnected) return;
   try {
@@ -10,6 +14,7 @@ export default async function () {
     if (connection.connection.host) {
       isDbConnected = true;
     }
+    globalForMongoDb.mongoDbClient = connection;
   } catch (error) {
     console.log(error);
   }

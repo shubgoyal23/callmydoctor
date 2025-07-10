@@ -185,4 +185,62 @@ const refreshToken = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, user, "Tokens Renewed successfully"));
 });
 
-export { registeruser, loginUser, logoutUser, currentUser, refreshToken };
+const doctorProfileUpdate = asyncHandler(async (req, res) => {
+  const {
+    specialization,
+    services,
+    experience,
+    languages,
+    fee,
+    availability,
+    slotTime,
+  } = req.body;
+
+  const user = await User.findByIdAndUpdate(
+    req.user?._id,
+    {
+      specialization,
+      services,
+      experience,
+      languages,
+      fee,
+      availability,
+      slotTime,
+    },
+    { new: true },
+  );
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, user, "Doctor profile updated successfully"));
+});
+
+const userProfileUpdate = asyncHandler(async (req, res) => {
+  const { gender, location, firstName, lastName, picture } = req.body;
+
+  const user = await User.findByIdAndUpdate(
+    req.user?._id,
+    {
+      gender,
+      location,
+      firstName,
+      lastName,
+      picture,
+    },
+    { new: true },
+  );
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, user, "User profile updated successfully"));
+});
+
+export {
+  registeruser,
+  loginUser,
+  logoutUser,
+  currentUser,
+  refreshToken,
+  doctorProfileUpdate,
+  userProfileUpdate,
+};

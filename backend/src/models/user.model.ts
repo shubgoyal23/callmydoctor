@@ -12,10 +12,15 @@ interface IUser {
   password?: string;
   accessToken?: string;
   refreshToken?: string;
+  gender: string;
   role: {
     type: string;
     enum: ["user", "doctor", "admin"];
     default: "user";
+  };
+  location: {
+    city: string;
+    locality: string;
   };
 }
 
@@ -34,6 +39,11 @@ const userSchema = new Schema<UserDocument>(
   {
     firstName: { type: String },
     lastName: { type: String },
+    gender: { type: String },
+    location: {
+      city: { type: String },
+      locality: { type: String },
+    },
     email: {
       type: String,
       required: true,

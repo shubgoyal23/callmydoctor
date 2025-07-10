@@ -30,12 +30,12 @@ app.use((req, res, next) => {
 
 import { errorHandler } from "./middlewares/errorHandler.js";
 import userRouter from "./routes/user.router.js";
-import bookRouter from "./routes/book.router.js";
-import reviewRouter from "./routes/review.router.js";
+import appointmentRouter from "./routes/appointment.router.js";
+import doctorsRouter from "./routes/doctors.router.js";
 
 app.use("/api/v1/users", userRouter);
-app.use("/api/v1/books", bookRouter);
-app.use("/api/v1/reviews", reviewRouter);
+app.use("/api/v1/appointments", appointmentRouter);
+app.use("/api/v1/doctors", doctorsRouter);
 
 app.use(errorHandler);
 

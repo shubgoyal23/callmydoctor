@@ -5,6 +5,8 @@ import {
   logoutUser,
   currentUser,
   refreshToken,
+  doctorProfileUpdate,
+  userProfileUpdate,
 } from "../controllers/user.controller.js";
 import { verifyJwt } from "../middlewares/auth.middleware.js";
 
@@ -18,5 +20,7 @@ router.route("/renew").get(refreshToken);
 // secure route
 router.route("/logout").get(verifyJwt, logoutUser);
 router.route("/current").get(verifyJwt, currentUser);
+router.route("/doctor").patch(verifyJwt, doctorProfileUpdate);
+router.route("/user").patch(verifyJwt, userProfileUpdate);
 
 export default router;
