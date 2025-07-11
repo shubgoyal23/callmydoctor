@@ -88,7 +88,7 @@ function UserDashboard() {
 
    return (
       <div>
-         <Card className="p-4 max-w-xl mx-auto">
+         <Card className="p-4 max-w-3xl mx-auto">
             <CardHeader>
                <CardTitle className="text-2xl">Book Appointment</CardTitle>
             </CardHeader>
@@ -141,7 +141,7 @@ function UserDashboard() {
             </CardContent>
          </Card>
 
-         <Card className="p-4 mx-auto mt-6">
+         <Card className="p-4 max-w-3xl mx-auto mt-6">
             <CardHeader>
                <CardTitle className="text-2xl">Your Appointments</CardTitle>
             </CardHeader>
