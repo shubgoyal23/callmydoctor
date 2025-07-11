@@ -5,6 +5,7 @@ import { User } from "../models/user.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResposne.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
+import { sendEmail } from "../utils/email.js";
 
 const daysOfWeek = [
   "Sunday",
@@ -128,6 +129,12 @@ const bookAppointment = asyncHandler(async (req, res) => {
 
   const redisClient = await getRedisClient();
   await redisClient.lPush(`appointment:Queue`, `${appointment._id}`);
+
+  sendEmail(
+    req.user?.email!,
+    "Appointment booked successfully",
+    "Appointment booked successfully",
+  );
 
   return res
     .status(200)
