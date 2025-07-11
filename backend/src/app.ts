@@ -11,6 +11,8 @@ app.use(
   cors({
     origin: config.corsOrigin,
     credentials: true,
+    preflightContinue: true,
+    optionsSuccessStatus: 200,
   }),
 );
 app.use(cookieParser());
