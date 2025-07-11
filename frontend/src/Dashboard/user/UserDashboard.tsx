@@ -147,7 +147,7 @@ function UserDashboard() {
             </CardHeader>
             <CardContent>
                {appointments.length > 0 ? (
-                  <div className="flex flex-wrap gap-4 justify-center">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                      {appointments.map((appointment: any) => (
                         <Card key={appointment._id} className="w-full max-w-sm bg-card text-card-foreground">
                            <CardHeader>
