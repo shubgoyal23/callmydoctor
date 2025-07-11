@@ -8,6 +8,8 @@ const app = express();
 app.use(cors({
     origin: config.corsOrigin,
     credentials: true,
+    preflightContinue: true,
+    optionsSuccessStatus: 200,
 }));
 app.use(cookieParser());
 app.use(express.json({ limit: "16kb" }));

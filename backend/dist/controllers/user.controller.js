@@ -78,6 +78,7 @@ const loginUser = asyncHandler(async (req, res) => {
         httpOnly: true,
         secure: true,
         maxAge: 365 * 24 * 60 * 60 * 1000,
+        sameSite: 'none',
     };
     finduser.password = undefined;
     finduser.refreshToken = refreshToken;
@@ -104,6 +105,7 @@ const logoutUser = asyncHandler(async (req, res) => {
     const options = {
         httpOnly: true,
         secure: true,
+        sameSite: 'none',
     };
     res
         .status(200)
@@ -152,6 +154,7 @@ const refreshToken = asyncHandler(async (req, res) => {
         httpOnly: true,
         secure: true,
         maxAge: 365 * 24 * 60 * 60 * 1000,
+        sameSite: 'none',
     };
     return res
         .status(200)
