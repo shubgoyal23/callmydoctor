@@ -13,7 +13,7 @@ function TimeSelector({
    list,
 }: {
    time: string;
-   setTime: React.Dispatch<React.SetStateAction<string>>;
+   setTime: (time: string) => void;
    list: string[];
 }) {
    return (

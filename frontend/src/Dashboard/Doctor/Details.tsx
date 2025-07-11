@@ -87,11 +87,24 @@ const ProfessionalDetailsForm = () => {
             .filter(range => range.start && range.end)
             .map(range => `${range.start}-${range.end}`);
 
-         const m = daysOfWeek.map(day => ({ day, time: validTimeRanges }));
-         setFormData(prev => ({
-            ...prev,
-            availability: [...prev.availability, ...m]
-         }));
+         for (let i = 0; i < daysOfWeek.length; i++) {
+            const existingDayIndex = formData.availability.findIndex(av => av.day === daysOfWeek[i]);
+            if (existingDayIndex >= 0) {
+               setFormData(prev => ({
+                  ...prev,
+                  availability: prev.availability.map((av, index) =>
+                     index === existingDayIndex
+                        ? { ...av, time: [...new Set([...av.time, ...validTimeRanges])] }
+                        : av
+                  )
+               }));
+            } else {
+               setFormData(prev => ({
+                  ...prev,
+                  availability: [...prev.availability, { day: daysOfWeek[i], time: validTimeRanges }]
+               }));
+            }
+         }
       }
       setCurrentTimeRanges([{ start: '', end: '' }]);
    }

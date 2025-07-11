@@ -141,9 +141,34 @@ const bookAppointment = asyncHandler(async (req, res) => {
 });
 
 const getAppointmentList = asyncHandler(async (req, res) => {
-  const appointmentList = await Appointment.find({
-    userId: req.user?._id,
-  });
+  const appointmentList = await Appointment.aggregate([
+    {
+      $match: {
+        userId: req.user?._id,
+      },
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "doctorId",
+        foreignField: "_id",
+        as: "doctorDetails",
+      },
+    },
+    {
+      $unwind: "$doctorDetails",
+    },
+    {
+      $project: {
+        _id: 1,
+        doctorFirstName: "$doctorDetails.firstName",
+        doctorLastName: "$doctorDetails.lastName",
+        timeSlot: 1,
+        date: 1,
+        status: 1,
+      },
+    },
+  ]);
 
   return res
     .status(200)

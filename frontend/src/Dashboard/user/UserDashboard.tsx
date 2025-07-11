@@ -13,9 +13,27 @@ function UserDashboard() {
    const [date, setDate] = useState(new Date());
    const [time, setTime] = useState("10:00");
    const [timeList, setTimeList] = useState<string[]>([]);
+   const [formStage, setFormStage] = useState<number>(0);
+   const [appointments, setAppointments] = useState<any[]>([]);
+
+   const selectDoctor = (user: User | null) => {
+      setSelectedOption(user);
+      setFormStage(1);
+   };
+
+   const selectDate = (date: Date) => {
+      setDate(date);
+      setFormStage(2);
+   };
+
+   const selectTime = (time: string) => {
+      setTime(time);
+      setFormStage(3);
+   };
 
    const clearForm = () => {
       setSelectedOption(null);
+      setFormStage(0);
       setDate(new Date());
       setTime("10:00");
       setTimeList([]);
@@ -30,6 +48,7 @@ function UserDashboard() {
       if (response.success) {
          toast.success("Appointment booked successfully");
          clearForm();
+         setFormStage(4);
       }
    };
 
@@ -53,6 +72,20 @@ function UserDashboard() {
       fetchTimeSlots();
    }, [selectedOption?._id, date]);
 
+   useEffect(() => {
+      const fetchAppointments = async () => {
+         try {
+            const response = await api.get(`/api/v1/appointments/appointments`);
+            if (response.success) {
+               setAppointments(response.data);
+            }
+         } catch (error) {
+            console.error("Error fetching appointments:", error);
+         }
+      };
+      fetchAppointments();
+   }, []);
+
    return (
       <div>
          <Card className="p-4 max-w-xl mx-auto">
@@ -64,22 +97,22 @@ function UserDashboard() {
                   <h3 className="text-lg font-semibold">Choose a doctor</h3>
                   <DoctorSelect
                      selectedOption={selectedOption}
-                     setSelectedOption={setSelectedOption}
+                     setSelectedOption={selectDoctor}
                   />
                </div>
-               {selectedOption && (
+               {formStage >= 1 && formStage < 4 && (
                   <div>
                      <h3 className="text-lg font-semibold">Choose a date</h3>
-                     <DateSelector date={date} setDate={setDate} />
+                     <DateSelector date={date} setDate={selectDate} />
                   </div>
                )}
-               {date && (
+               {formStage >= 2 && formStage < 4 && (
                   <div>
                      <h3 className="text-lg font-semibold">Choose a time</h3>
                      {timeList.length > 0 ? (
                         <TimeSelector
                            time={time}
-                           setTime={setTime}
+                           setTime={selectTime}
                            list={timeList}
                         />
                      ) : (
@@ -87,7 +120,7 @@ function UserDashboard() {
                      )}
                   </div>
                )}
-               {time && (
+               {formStage >= 3 && formStage < 4 && (
                   <div className="flex flex-col gap-2 border border-gray-200 p-2 rounded-lg">
                      <h3 className="text-lg font-semibold">Confirm your appointment</h3>
                      <p>
@@ -98,6 +131,39 @@ function UserDashboard() {
                      <p>Time: {time}</p>
                      <Button onClick={bookAppointment}>Book Appointment</Button>
                   </div>
+               )}
+               {formStage >= 4 && (
+                  <div className="flex flex-col gap-2 border border-gray-200 p-2 rounded-lg">
+                     <h3 className="text-lg font-semibold text-center mb-2">Appointment booked successfully</h3>
+                     <Button onClick={clearForm}>Book Another Appointment</Button>
+                  </div>
+               )}
+            </CardContent>
+         </Card>
+
+         <Card className="p-4 mx-auto mt-6">
+            <CardHeader>
+               <CardTitle className="text-2xl">Your Appointments</CardTitle>
+            </CardHeader>
+            <CardContent>
+               {appointments.length > 0 ? (
+                  <div className="flex flex-wrap gap-4 justify-center">
+                     {appointments.map((appointment: any) => (
+                        <Card key={appointment._id} className="w-full max-w-sm bg-card text-card-foreground">
+                           <CardHeader>
+                              <CardTitle className="text-center">Appointment</CardTitle>
+                           </CardHeader>
+                           <CardContent>
+                              <p className="text-center">Doctor: {appointment.doctorFirstName} {appointment.doctorLastName}</p>
+                              <p className="text-center">Date: {new Date(appointment.date).toDateString()}</p>
+                              <p className="text-center">Time: {appointment.timeSlot}</p>
+                              <p className="text-center">Status: {appointment.status}</p>
+                           </CardContent>
+                        </Card>
+                     ))}
+                  </div>
+               ) : (
+                  <p className="text-center">No appointments found</p>
                )}
             </CardContent>
          </Card>

@@ -1,4 +1,3 @@
-import React from "react";
 import { Calendar } from "@/components/ui/calendar";
 
 function DateSelector({
@@ -6,9 +5,10 @@ function DateSelector({
    setDate,
 }: {
    date: Date;
-   setDate: React.Dispatch<React.SetStateAction<Date>>;
+   setDate: (date: Date) => void;
 }) {
    const today = new Date();
+   today.setHours(0, 0, 0, 0);
    return (
       <div className="w-full h-full">
          <Calendar
