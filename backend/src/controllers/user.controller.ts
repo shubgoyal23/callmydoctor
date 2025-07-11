@@ -96,7 +96,7 @@ const loginUser = asyncHandler(async (req, res) => {
     httpOnly: true,
     secure: true,
     maxAge: 365 * 24 * 60 * 60 * 1000,
-    domain: "callmydoctor-red.vercel.app",
+    sameSite: "none" as const,
   };
 
   finduser.password = undefined;
@@ -134,7 +134,7 @@ const logoutUser = asyncHandler(async (req, res) => {
   const options = {
     httpOnly: true,
     secure: true,
-    domain: "callmydoctor-red.vercel.app",
+    sameSite: "none" as const,
   };
 
   res
@@ -198,7 +198,7 @@ const refreshToken = asyncHandler(async (req, res) => {
     httpOnly: true,
     secure: true,
     maxAge: 365 * 24 * 60 * 60 * 1000,
-    domain: "callmydoctor-red.vercel.app",
+    sameSite: "none" as const,
   };
 
   return res
