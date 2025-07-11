@@ -77,14 +77,16 @@ const loginUser = asyncHandler(async (req, res) => {
   if (!checkpass) {
     throw new ApiError(403, "Wrong Email or Password");
   }
-
+  let doctor: DoctorDocument | undefined = undefined;
   if (finduser.role === "doctor") {
-    const doctor = await Doctor.findOne({ doctorId: finduser._id });
-    if (!doctor) {
-      finduser.details = {} as DoctorDocument;
+    const docDet = await Doctor.findOne({ doctorId: finduser._id });
+    if (!docDet) {
+      doctor = {} as DoctorDocument;
+    } else {
+      doctor = docDet;
     }
-    finduser.details = doctor;
   }
+  finduser.details = doctor;
 
   const { refreshToken, accessToken } = await generateAccessTokenAndRefresToken(
     finduser?._id?.toString()!,
@@ -149,7 +151,7 @@ const currentUser = asyncHandler(async (req, res) => {
     }
   }
   const ret = {
-    ...req.user.toObject(),
+    ...req.user?.toObject(),
     details: doc,
   };
   return res
