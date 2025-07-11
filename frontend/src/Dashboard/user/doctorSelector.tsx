@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import type { DoctorDetails } from "../../types/Doctors";
 import {
    Select,
    SelectContent,
@@ -10,8 +9,13 @@ import {
 import { api } from "@/lib/api";
 import type { User } from "@/types/User";
 
-function DoctorSelect() {
-   const [selectedOption, setSelectedOption] = useState<User | null>(null);
+function DoctorSelect({
+   selectedOption,
+   setSelectedOption,
+}: {
+   selectedOption: User | null;
+   setSelectedOption: (option: User | null) => void;
+}) {
    const [doctorsList, setDoctorsList] = useState<User[]>([] as User[]);
 
    useEffect(() => {
@@ -38,7 +42,7 @@ function DoctorSelect() {
                )
             }
          >
-            <SelectTrigger>
+            <SelectTrigger className="w-full">
                <SelectValue placeholder="Select an option" />
             </SelectTrigger>
             <SelectContent>

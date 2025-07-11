@@ -13,7 +13,7 @@ const router = Router();
 
 // secure route
 router.route("/doctors").get(verifyJwt, getDoctorList);
-router.route("/slots").post(verifyJwt, getDoctorsSlots);
+router.route("/timeSlots").post(verifyJwt, getDoctorsSlots);
 router.route("/book").post(verifyJwt, bookAppointment);
 router.route("/appointments").get(verifyJwt, getAppointmentList);
 router.route("/appointment/:id").get(verifyJwt, getAppointmentDetails);

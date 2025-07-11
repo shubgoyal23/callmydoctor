@@ -82,7 +82,7 @@ const request = async <T>(
 export const api = {
    get: <T>(endpoint: string, params?: Record<string, string>) =>
       request<T>(endpoint, "GET", undefined, params),
-   post: <T>(endpoint: string, body: T, params?: Record<string, string>) =>
+   post: <T>(endpoint: string, body: any, params?: Record<string, string>) =>
       request<T>(endpoint, "POST", body, params),
    put: <T>(endpoint: string, body: T, params?: Record<string, string>) =>
       request<T>(endpoint, "PUT", body, params),

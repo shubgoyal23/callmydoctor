@@ -6,6 +6,16 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResposne.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
+const daysOfWeek = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
+
 const getDoctorList = asyncHandler(async (req, res) => {
   let { category } = req.query;
   // if (!category) {
@@ -54,7 +64,7 @@ const getDoctorList = asyncHandler(async (req, res) => {
 });
 
 const getDoctorsSlots = asyncHandler(async (req, res) => {
-  const { id, date } = req.params;
+  const { id, date } = req.body;
   if (!id || !date) {
     throw new ApiError(401, "Doctor id and Date is required");
   }
@@ -69,11 +79,21 @@ const getDoctorsSlots = asyncHandler(async (req, res) => {
     d.getMonth(),
     d.getDate(),
   ).getTime();
-  const slots = await redisClient.smembers(`doctor:${id}:${date_formated}`);
+  const slots = await redisClient.lRange(
+    `doctor:${id}:${date_formated}`,
+    0,
+    -1,
+  );
 
+  const timeAvailable = doctor.availability.find(
+    (item) => item.day === daysOfWeek[d.getDay()],
+  );
+  if (!timeAvailable) {
+    throw new ApiError(403, "Doctor not available on this day");
+  }
   const ds = {
-    ...doctor,
-    slots,
+    booked: slots,
+    available: timeAvailable.time,
   };
 
   return res
@@ -82,9 +102,9 @@ const getDoctorsSlots = asyncHandler(async (req, res) => {
 });
 
 const bookAppointment = asyncHandler(async (req, res) => {
-  const { doctorId, date, startTime, endTime } = req.body;
-  if (!doctorId || !date || !startTime || !endTime) {
-    throw new ApiError(401, "Doctor id, start time, and end time is required");
+  const { doctorId, date, timeSlot } = req.body;
+  if (!doctorId || !date || !timeSlot) {
+    throw new ApiError(401, "Doctor id, date, and time slot is required");
   }
 
   const d = new Date(date);
@@ -97,8 +117,7 @@ const bookAppointment = asyncHandler(async (req, res) => {
   const appointment = await Appointment.create({
     userId: req.user?._id,
     doctorId,
-    startTime,
-    endTime,
+    timeSlot,
     date: date_formated,
     status: "pending",
   });
@@ -108,7 +127,7 @@ const bookAppointment = asyncHandler(async (req, res) => {
   }
 
   const redisClient = await getRedisClient();
-  await redisClient.lpush(`appointment:Queue`, `${appointment._id}`);
+  await redisClient.lPush(`appointment:Queue`, `${appointment._id}`);
 
   return res
     .status(200)

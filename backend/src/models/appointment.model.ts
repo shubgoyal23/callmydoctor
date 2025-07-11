@@ -5,8 +5,7 @@ interface IAppointment {
   _id: mongoose.Schema.Types.ObjectId;
   userId: mongoose.Schema.Types.ObjectId;
   doctorId: mongoose.Schema.Types.ObjectId;
-  startTime: string;
-  endTime: string;
+  timeSlot: string;
   status: string;
   date: number; // epoch of start of date
   fee: number;
@@ -22,8 +21,7 @@ const appointmentSchema = new Schema<AppointmentDocument>(
   {
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     doctorId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-    startTime: { type: String },
-    endTime: { type: String },
+    timeSlot: { type: String },
     status: { type: String },
     date: { type: Number },
     fee: { type: Number },
