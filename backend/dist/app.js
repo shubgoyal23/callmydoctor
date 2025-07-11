@@ -28,4 +28,4 @@ app.use("/api/v1/users", userRouter);
 app.use("/api/v1/appointments", appointmentRouter);
 app.use("/api/v1/doctors", doctorsRouter);
 app.use(errorHandler);
-export { app };
+export default app;

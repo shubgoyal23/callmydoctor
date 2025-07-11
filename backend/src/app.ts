@@ -40,4 +40,4 @@ app.use("/api/v1/doctors", doctorsRouter);
 
 app.use(errorHandler);
 
-export { app };
+export default app;
